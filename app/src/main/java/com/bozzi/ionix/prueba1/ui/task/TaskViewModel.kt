@@ -40,7 +40,7 @@ class TaskViewModel @Inject constructor(
     val uiState: StateFlow<TaskUiState> = taskRepository
         .tasks.map<List<Task>, TaskUiState>(::Success)
         .catch { emit(Error(it)) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), Loading)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(3000), Loading)
 
     fun addTask(task: Task) {
         viewModelScope.launch {

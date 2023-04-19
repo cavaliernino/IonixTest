@@ -40,7 +40,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface DataModule {
-
+/*
     @Singleton
     @Binds
     fun bindsTaskRepository(
@@ -54,7 +54,7 @@ interface DataModule {
     @Qualifier
     @Retention(AnnotationRetention.RUNTIME)
     annotation class LocalTasksDataSource
-/*
+
     @Singleton
     @RemoteTasksDataSource
     @Provides
@@ -73,7 +73,7 @@ interface DataModule {
             database.taskDao(), ioDispatcher
         )
     }
-*/
+
     @Singleton
     @Provides
     fun provideDataBase(@ApplicationContext context: Context): AppDatabase {
@@ -86,7 +86,7 @@ interface DataModule {
 
     @Singleton
     @Provides
-    fun provideIoDispatcher() = Dispatchers.IO
+    fun provideIoDispatcher() = Dispatchers.IO*/
 }
 
 class FakeTaskRepository @Inject constructor() : TaskRepository {
@@ -96,7 +96,7 @@ class FakeTaskRepository @Inject constructor() : TaskRepository {
         throw NotImplementedError()
     }
 }
-val t1 = Task(0, "One", "Task 1", false, Date(System.currentTimeMillis()), null)
-val t2 = Task(1, "Two", "Task 2", false, Date(System.currentTimeMillis()), null)
-val t3 = Task(2, "Three", "Task 3", false, Date(System.currentTimeMillis()), null)
+val t1 = Task(0, "One", "Task 1", false, System.currentTimeMillis(), null)
+val t2 = Task(1, "Two", "Task 2", false, System.currentTimeMillis(), null)
+val t3 = Task(2, "Three", "Task 3", false, System.currentTimeMillis(), null)
 val fakeTasks = listOf(t1, t2, t3)
