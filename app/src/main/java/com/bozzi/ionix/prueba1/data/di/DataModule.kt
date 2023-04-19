@@ -16,6 +16,8 @@
 
 package com.bozzi.ionix.prueba1.data.di
 
+import android.content.Context
+import androidx.room.Room
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -24,7 +26,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import com.bozzi.ionix.prueba1.data.TaskRepository
 import com.bozzi.ionix.prueba1.data.DefaultTaskRepository
+import com.bozzi.ionix.prueba1.data.dao.AppDatabase
+import com.bozzi.ionix.prueba1.data.model.Task
+import dagger.Provides
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import java.sql.Date
 import javax.inject.Inject
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -36,14 +46,57 @@ interface DataModule {
     fun bindsTaskRepository(
         taskRepository: DefaultTaskRepository
     ): TaskRepository
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class RemoteTasksDataSource
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class LocalTasksDataSource
+/*
+    @Singleton
+    @RemoteTasksDataSource
+    @Provides
+    fun provideTasksRemoteDataSource(): TasksDataSource {
+        return TasksRemoteDataSource
+    }
+
+    @Singleton
+    @LocalTasksDataSource
+    @Provides
+    fun provideTasksLocalDataSource(
+        database: AppDatabase,
+        ioDispatcher: CoroutineDispatcher
+    ): TasksDataSource {
+        return TasksLocalDataSource(
+            database.taskDao(), ioDispatcher
+        )
+    }
+*/
+    @Singleton
+    @Provides
+    fun provideDataBase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context.applicationContext,
+            AppDatabase::class.java,
+            "IonixTasks.db"
+        ).build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideIoDispatcher() = Dispatchers.IO
 }
 
 class FakeTaskRepository @Inject constructor() : TaskRepository {
-    override val tasks: Flow<List<String>> = flowOf(fakeTasks)
+    override val tasks: Flow<List<Task>> = flowOf(fakeTasks)
 
-    override suspend fun add(name: String) {
+    override suspend fun add(task: Task) {
         throw NotImplementedError()
     }
 }
-
-val fakeTasks = listOf("One", "Two", "Three")
+val t1 = Task(0, "One", "Task 1", false, Date(System.currentTimeMillis()), null)
+val t2 = Task(1, "Two", "Task 2", false, Date(System.currentTimeMillis()), null)
+val t3 = Task(2, "Three", "Task 3", false, Date(System.currentTimeMillis()), null)
+val fakeTasks = listOf(t1, t2, t3)

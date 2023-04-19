@@ -40,6 +40,8 @@ import androidx.lifecycle.Lifecycle.State.STARTED
 import androidx.lifecycle.repeatOnLifecycle
 import com.bozzi.ionix.prueba1.ui.theme.MyApplicationTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
+import com.bozzi.ionix.prueba1.data.model.Task
+import java.sql.Date
 
 @Composable
 fun TaskScreen(modifier: Modifier = Modifier, viewModel: TaskViewModel = hiltViewModel()) {
@@ -55,7 +57,7 @@ fun TaskScreen(modifier: Modifier = Modifier, viewModel: TaskViewModel = hiltVie
     }
     if (items is TaskUiState.Success) {
         TaskScreen(
-            items = (items as TaskUiState.Success).data,
+            tasks = (items as TaskUiState.Success).data,
             onSave = viewModel::addTask,
             modifier = modifier
         )
@@ -65,27 +67,22 @@ fun TaskScreen(modifier: Modifier = Modifier, viewModel: TaskViewModel = hiltVie
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TaskScreen(
-    items: List<String>,
-    onSave: (name: String) -> Unit,
+    tasks: List<Task>,
+    onSave: (task: Task) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
-        var nameTask by remember { mutableStateOf("Compose") }
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextField(
-                value = nameTask,
-                onValueChange = { nameTask = it }
-            )
-
-            Button(modifier = Modifier.width(96.dp), onClick = { onSave(nameTask) }) {
-                Text("Save")
+        tasks.forEach { task ->
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(task.title)
+                Text(task.expireOn.toString())
+                Button(modifier = Modifier.width(96.dp), onClick = { onSave(task) }) {
+                    Text("Save")
+                }
             }
-        }
-        items.forEach {
-            Text("Saved item: $it")
         }
     }
 }
@@ -96,7 +93,7 @@ internal fun TaskScreen(
 @Composable
 private fun DefaultPreview() {
     MyApplicationTheme {
-        TaskScreen(listOf("Compose", "Room", "Kotlin"), onSave = {})
+        TaskScreen()
     }
 }
 
@@ -104,6 +101,6 @@ private fun DefaultPreview() {
 @Composable
 private fun PortraitPreview() {
     MyApplicationTheme {
-        TaskScreen(listOf("Compose", "Room", "Kotlin"), onSave = {})
+        TaskScreen()
     }
 }

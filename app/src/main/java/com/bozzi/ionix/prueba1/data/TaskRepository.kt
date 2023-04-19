@@ -16,26 +16,25 @@
 
 package com.bozzi.ionix.prueba1.data
 
+import com.bozzi.ionix.prueba1.data.dao.TaskDao
+import com.bozzi.ionix.prueba1.data.model.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import com.bozzi.ionix.prueba1.data.local.database.Task
-import com.bozzi.ionix.prueba1.data.local.database.TaskDao
+
 import javax.inject.Inject
 
 interface TaskRepository {
-    val tasks: Flow<List<String>>
+    val tasks: Flow<List<Task>>
 
-    suspend fun add(name: String)
+    suspend fun add(task: Task)
 }
 
-class DefaultTaskRepository @Inject constructor(
-    private val taskDao: TaskDao
-) : TaskRepository {
+class DefaultTaskRepository @Inject constructor(taskDao: TaskDao) : TaskRepository {
 
-    override val tasks: Flow<List<String>> =
-        taskDao.getTasks().map { items -> items.map { it.name } }
+    override val tasks: Flow<List<Task>> =
+        taskDao.getAll()
 
-    override suspend fun add(name: String) {
-        taskDao.insertTask(Task(name = name))
+    override suspend fun add(task: Task) {
+
     }
 }

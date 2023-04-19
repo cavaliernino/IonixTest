@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import com.bozzi.ionix.prueba1.data.TaskRepository
+import com.bozzi.ionix.prueba1.data.model.Task
 import com.bozzi.ionix.prueba1.ui.task.TaskUiState.Error
 import com.bozzi.ionix.prueba1.ui.task.TaskUiState.Loading
 import com.bozzi.ionix.prueba1.ui.task.TaskUiState.Success
@@ -37,13 +38,13 @@ class TaskViewModel @Inject constructor(
 ) : ViewModel() {
 
     val uiState: StateFlow<TaskUiState> = taskRepository
-        .tasks.map<List<String>, TaskUiState>(::Success)
+        .tasks.map<List<Task>, TaskUiState>(::Success)
         .catch { emit(Error(it)) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), Loading)
 
-    fun addTask(name: String) {
+    fun addTask(task: Task) {
         viewModelScope.launch {
-            taskRepository.add(name)
+            taskRepository.add(task)
         }
     }
 }
@@ -51,5 +52,5 @@ class TaskViewModel @Inject constructor(
 sealed interface TaskUiState {
     object Loading : TaskUiState
     data class Error(val throwable: Throwable) : TaskUiState
-    data class Success(val data: List<String>) : TaskUiState
+    data class Success(val data: List<Task>) : TaskUiState
 }
