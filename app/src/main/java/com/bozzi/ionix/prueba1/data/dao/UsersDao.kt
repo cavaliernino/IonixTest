@@ -7,7 +7,7 @@ import androidx.room.Query
 import com.bozzi.ionix.prueba1.data.model.User
 
 @Dao
-interface UserDao {
+interface UsersDao {
     @Query("SELECT * FROM user WHERE email = :email")
     fun getUserByEmail(email: String): User
 

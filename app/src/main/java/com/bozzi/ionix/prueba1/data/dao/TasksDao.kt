@@ -8,19 +8,17 @@ import com.bozzi.ionix.prueba1.data.model.Task
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface TaskDao {
-    @Query("SELECT * FROM task WHERE assigned_user = :userId ORDER BY expire_on ASC")
-    fun getTaskByUserId(userId: String): Flow<Task>
+interface TasksDao {
 
     @Query("SELECT * FROM task")
-    fun getAll(): Flow<List<Task>>
+    fun getTasks(): Flow<List<Task>>
 
-    @Query("SELECT * FROM task WHERE assigned_user = :userId")
+    @Query("SELECT * FROM task WHERE assigned_user = :userId ORDER BY expire_on ASC")
     fun getUserTasks(userId: String): Flow<List<Task>>
 
     @Insert
-    fun insert(task: Task)
+    fun insertTask(task: Task)
 
     @Delete
-    fun delete(task: Task)
+    fun deleteTask(task: Task)
 }

@@ -27,6 +27,8 @@ import kotlinx.coroutines.flow.flowOf
 import com.bozzi.ionix.prueba1.data.TaskRepository
 import com.bozzi.ionix.prueba1.data.DefaultTaskRepository
 import com.bozzi.ionix.prueba1.data.dao.AppDatabase
+import com.bozzi.ionix.prueba1.data.dao.TasksDataSource
+import com.bozzi.ionix.prueba1.data.dao.TasksLocalDataSource
 import com.bozzi.ionix.prueba1.data.model.Task
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -40,7 +42,8 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface DataModule {
-/*
+
+
     @Singleton
     @Binds
     fun bindsTaskRepository(
@@ -54,14 +57,14 @@ interface DataModule {
     @Qualifier
     @Retention(AnnotationRetention.RUNTIME)
     annotation class LocalTasksDataSource
-
+/*
     @Singleton
     @RemoteTasksDataSource
     @Provides
     fun provideTasksRemoteDataSource(): TasksDataSource {
         return TasksRemoteDataSource
     }
-
+*/
     @Singleton
     @LocalTasksDataSource
     @Provides
@@ -86,7 +89,7 @@ interface DataModule {
 
     @Singleton
     @Provides
-    fun provideIoDispatcher() = Dispatchers.IO*/
+    fun provideIoDispatcher() = Dispatchers.IO
 }
 
 class FakeTaskRepository @Inject constructor() : TaskRepository {
