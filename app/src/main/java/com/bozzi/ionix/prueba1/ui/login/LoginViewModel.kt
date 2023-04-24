@@ -32,7 +32,7 @@ class LoginViewModel @Inject constructor(
             //_loginResult.value = LoginResult(error = R.string.login_failed)
         }
     }
-/*
+
     fun loginDataChanged(username: String, password: String) {
         if (!isUserNameValid(username)) {
             _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
@@ -42,7 +42,7 @@ class LoginViewModel @Inject constructor(
             _loginForm.value = LoginFormState(isDataValid = true)
         }
     }
-*/
+
     // A placeholder username validation check
     private fun isUserNameValid(username: String): Boolean {
         return if (username.contains('@')) {

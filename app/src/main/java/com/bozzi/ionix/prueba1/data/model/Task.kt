@@ -7,12 +7,12 @@ import java.sql.Date
 
 @Entity
 data class Task (
-    @PrimaryKey val uid: Int,
+    @PrimaryKey val uid: Int = 0,
     val title: String = "",
     val description: String = "",
     @ColumnInfo(name = "completed") var isCompleted: Boolean = false,
     @ColumnInfo(name = "expire_on") val expireOn: Long = 0,
-    @ColumnInfo(name = "assigned_user") val assignedUser: String?
+    @ColumnInfo(name = "assigned_user") val assignedUser: String = ""
     ) {
 
     val titleForList: String

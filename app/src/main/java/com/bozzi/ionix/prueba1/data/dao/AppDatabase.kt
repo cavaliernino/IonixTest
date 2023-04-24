@@ -6,8 +6,7 @@ import com.bozzi.ionix.prueba1.data.model.Task
 import com.bozzi.ionix.prueba1.data.model.User
 
 @Database(entities = [User::class, Task::class], version = 1)
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun userDao(): UserDao
-    abstract fun taskDao(): TaskDao
-    abstract fun userAndTaskDao(): UserWithTasksDao
+abstract class AppDatabase : RoomDatabase () {
+    abstract fun usersDao(): UsersDao
+    abstract fun tasksDao(): TasksDao
 }

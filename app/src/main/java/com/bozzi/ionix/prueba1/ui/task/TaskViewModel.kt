@@ -18,6 +18,7 @@ package com.bozzi.ionix.prueba1.ui.task
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bozzi.ionix.prueba1.data.TasksRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -25,28 +26,43 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import com.bozzi.ionix.prueba1.data.TaskRepository
 import com.bozzi.ionix.prueba1.data.model.Task
 import com.bozzi.ionix.prueba1.ui.task.TaskUiState.Error
 import com.bozzi.ionix.prueba1.ui.task.TaskUiState.Loading
 import com.bozzi.ionix.prueba1.ui.task.TaskUiState.Success
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class TaskViewModel @Inject constructor(
-    private val taskRepository: TaskRepository
+    private val taskRepository: TasksRepository
 ) : ViewModel() {
+/*
 
-    val uiState: StateFlow<TaskUiState> = taskRepository
-        .tasks.map<List<Task>, TaskUiState>(::Success)
-        .catch { emit(Error(it)) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(3000), Loading)
+    init {
+        viewModelScope.launch {
+            uiState = taskRepository.getTasks().let {
+                if (it is Success) {
 
+                } else {
+
+                }
+            }
+
+            }
+        }
+    }
+    val uiState: StateFlow<TaskUiState> = runBlocking {
+        taskRepository
+            .getTasks().map<List<Task>, TaskUiState>(::Success)
+            .catch { emit(Error(it)) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(3000), Loading)
+    }
     fun addTask(task: Task) {
         viewModelScope.launch {
             taskRepository.add(task)
         }
-    }
+    }*/
 }
 
 sealed interface TaskUiState {
